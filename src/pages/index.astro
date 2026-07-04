@@ -3,17 +3,25 @@ import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog");
 
-const siteTitle = "outofnoise";
+// 建站時間
 const createdAt = new Date("2026-07-04");
 
-// 按日期排序（新→舊）
-posts.sort(
-  (a, b) =>
-    new Date(b.data.date).getTime() -
-    new Date(a.data.date).getTime()
+// 現在時間
+const now = new Date();
+
+// 運行天數
+const daysRunning = Math.floor(
+  (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
 );
 
-// 總字數
+// 按日期排序（新 → 舊）
+posts.sort(
+  (a, b) =>
+    new Date(b.data.pubDate).getTime() -
+    new Date(a.data.pubDate).getTime()
+);
+
+// 總字數（markdown body）
 const totalWords = posts.reduce((sum, post) => {
   return (
     sum +
@@ -23,60 +31,68 @@ const totalWords = posts.reduce((sum, post) => {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width" />
-<title>{siteTitle}</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>outofnoise</title>
 </head>
 
 <body style="margin:0;background:#0b0b0f;color:#eaeaea;font-family:sans-serif;">
 
 <main style="max-width:720px;margin:auto;padding:40px;">
 
-<h1>{siteTitle}</h1>
+<!-- TITLE -->
+<h1>outofnoise</h1>
 
-<p>📅 Created: {createdAt.toDateString()}</p>
-<p>📝 Total posts: {posts.length}</p>
-<p>🔢 Total words: {totalWords}</p>
+<!-- POSTS -->
+<h2>📝 Posts</h2>
+
+{
+posts.map((post) => (
+  <article
+    style="margin-bottom:20px;padding:16px;border:1px solid #222;border-radius:10px;"
+  >
+    <h3>
+      <a
+        href={`/blog/${post.slug}`}
+        style="color:white;text-decoration:none;"
+      >
+        {post.data.title}
+      </a>
+    </h3>
+
+    <small>
+      {post.data.pubDate.toLocaleDateString("zh-TW", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })}
+    </small>
+
+    <p style="opacity:0.7;margin-top:8px;">
+      {post.data.description}
+    </p>
+  </article>
+))
+}
 
 <hr />
 
+<!-- TAGS -->
 <h2>🏷 Tags</h2>
 <p>(coming soon)</p>
 
 <hr />
 
-<h2>📝 Posts</h2>
+<!-- STATS -->
+<h2>📊 Stats</h2>
 
-{
-posts.map((post)=>(
-<article
-style="margin-bottom:20px;padding:16px;border:1px solid #222;border-radius:10px;"
->
-
-<h3>
-<a
-href={`/blog/${post.slug}`}
-style="color:white;text-decoration:none;"
->
-{post.data.title}
-</a>
-</h3>
-
-<small>
-  {new Date(post.data.date).toLocaleDateString("zh-TW", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })}
-</small>
-
-</article>
-))
-}
+<p>📅 Running: {daysRunning} days</p>
+<p>📝 Total posts: {posts.length}</p>
+<p>🔢 Total words: {totalWords}</p>
 
 </main>
+
 </body>
 </html>
-

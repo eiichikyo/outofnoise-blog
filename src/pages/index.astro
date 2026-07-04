@@ -1,83 +1,82 @@
 ---
-const siteTitle = "outofnoise";
+import { getCollection } from "astro:content";
 
-// 建立時間（可改）
+const posts = await getCollection("blog");
+
+const siteTitle = "outofnoise";
 const createdAt = new Date("2026-07-04");
 
-// 模擬 posts（之後會變成真正文章）
-const posts = [
-  {
-    title: "First Post",
-    date: "2026-07-04",
-    content: "This is a sample post for layout testing."
-  }
-];
+// 按日期排序（新→舊）
+posts.sort(
+  (a, b) =>
+    new Date(b.data.date).getTime() -
+    new Date(a.data.date).getTime()
+);
 
-// 字數統計
-function wordCount(text) {
-  return text.split(/\s+/).filter(Boolean).length;
-}
+// 總字數
+const totalWords = posts.reduce((sum, post) => {
+  return (
+    sum +
+    post.body.split(/\s+/).filter(Boolean).length
+  );
+}, 0);
 ---
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{siteTitle}</title>
-  </head>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>{siteTitle}</title>
+</head>
 
-  <body style="margin: 0; font-family: sans-serif; background: #0b0b0f; color: #eaeaea;">
+<body style="margin:0;background:#0b0b0f;color:#eaeaea;font-family:sans-serif;">
 
-    <main style="max-width: 720px; margin: auto; padding: 40px;">
+<main style="max-width:720px;margin:auto;padding:40px;">
 
-      <!-- Title -->
-      <h1 style="font-size: 40px; margin-bottom: 10px;">
-        {siteTitle}
-      </h1>
+<h1>{siteTitle}</h1>
 
-      <!-- Meta -->
-      <p>📅 Created: {createdAt.toDateString()}</p>
+<p>📅 Created: {createdAt.toDateString()}</p>
+<p>📝 Total posts: {posts.length}</p>
+<p>🔢 Total words: {totalWords}</p>
 
-      <p>📝 Total posts: {posts.length}</p>
+<hr />
 
-      <p>
-        🔢 Total words:
-        {posts.reduce((sum, post) => sum + wordCount(post.content), 0)}
-      </p>
+<h2>🏷 Tags</h2>
+<p>(coming soon)</p>
 
-      <hr style="margin: 30px 0;" />
+<hr />
 
-      <!-- Tags -->
-      <section>
-        <h2>🏷 Tags</h2>
-        <p style="opacity: 0.6;">(coming soon)</p>
-      </section>
+<h2>📝 Posts</h2>
 
-      <hr style="margin: 30px 0;" />
+{
+posts.map((post)=>(
+<article
+style="margin-bottom:20px;padding:16px;border:1px solid #222;border-radius:10px;"
+>
 
-      <!-- Posts -->
-      <section>
-        <h2>📝 Posts</h2>
+<h3>
+<a
+href={`/blog/${post.slug}`}
+style="color:white;text-decoration:none;"
+>
+{post.data.title}
+</a>
+</h3>
 
-        {posts.map((post) => (
-          <article style="margin-bottom: 24px; padding: 16px; border: 1px solid #222; border-radius: 10px;">
-            <h3 style="margin: 0 0 6px 0;">
-              {post.title}
-            </h3>
+<small>
+  {new Date(post.data.date).toLocaleDateString("zh-TW", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })}
+</small>
 
-            <small style="opacity: 0.7;">
-              {post.date}
-            </small>
+</article>
+))
+}
 
-            <p>
-              {post.content}
-            </p>
-          </article>
-        ))}
-
-      </section>
-
-    </main>
-  </body>
+</main>
+</body>
 </html>
+

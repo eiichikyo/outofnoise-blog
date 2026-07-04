@@ -2,7 +2,6 @@
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog");
-<a href={`/blog/${post.slug}`}>；
 
 // 建站時間
 const createdAt = new Date("2026-07-04");
@@ -22,12 +21,9 @@ posts.sort(
     new Date(a.data.pubDate).getTime()
 );
 
-// 總字數（markdown body）
+// 總字數
 const totalWords = posts.reduce((sum, post) => {
-  return (
-    sum +
-    post.body.split(/\s+/).filter(Boolean).length
-  );
+  return sum + post.body.split(/\s+/).filter(Boolean).length;
 }, 0);
 ---
 
@@ -43,22 +39,16 @@ const totalWords = posts.reduce((sum, post) => {
 
 <main style="max-width:720px;margin:auto;padding:40px;">
 
-<!-- TITLE -->
 <h1>outofnoise</h1>
 
-<!-- POSTS -->
 <h2>📝 Posts</h2>
 
 {
 posts.map((post) => (
-  <article
-    style="margin-bottom:20px;padding:16px;border:1px solid #222;border-radius:10px;"
-  >
+  <article style="margin-bottom:20px;padding:16px;border:1px solid #222;border-radius:10px;">
+    
     <h3>
-      <a
-        href={`/blog/${post.slug}`}
-        style="color:white;text-decoration:none;"
-      >
+      <a href={`/blog/${post.slug}`} style="color:white;text-decoration:none;">
         {post.data.title}
       </a>
     </h3>
@@ -74,19 +64,18 @@ posts.map((post) => (
     <p style="opacity:0.7;margin-top:8px;">
       {post.data.description}
     </p>
+
   </article>
 ))
 }
 
 <hr />
 
-<!-- TAGS -->
 <h2>🏷 Tags</h2>
 <p>(coming soon)</p>
 
 <hr />
 
-<!-- STATS -->
 <h2>📊 Stats</h2>
 
 <p>📅 Running: {daysRunning} days</p>

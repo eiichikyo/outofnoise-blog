@@ -21,7 +21,6 @@ const { post } = Astro.props;
   </head>
 
   <body style="max-width:720px;margin:auto;padding:40px;font-family:sans-serif;">
-    
     <h1>{post.data.title}</h1>
 
     <p>
@@ -31,6 +30,5 @@ const { post } = Astro.props;
     <hr />
 
     <article set:html={post.body} />
-
   </body>
 </html>

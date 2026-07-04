@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog");
+<a href={`/blog/${post.slug}`}>；
 
 // 建站時間
 const createdAt = new Date("2026-07-04");

@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const tagSet = new Set(posts.flatMap((p) => p.data.tags));
+  return [...tagSet].map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+<html lang="zh">
+<body style="background:#0b0b0f;color:white;padding:40px;">
+<h1>#{tag}</h1>
+{posts.map((post) => (
+  <article style="margin-bottom:20px;">
+    <a href={`/blog/${post.id}`} style="color:white;text-decoration:none;">{post.data.title}</a>
+    <p style="opacity:.6">{post.data.description}</p>
+  </article>
+))}
+</body>
+</html>

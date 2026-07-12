@@ -2,33 +2,31 @@
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
+const posts = await getCollection("blog");
 
-  return posts.map((post) => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
+return posts.map((post)=>({
+params:{slug:post.slug},
+props:{post}
+}));
 }
 
 const { post } = Astro.props;
+
+const { Content } = await post.render();
 ---
 
-<!doctype html>
 <html lang="zh">
-  <head>
-    <meta charset="UTF-8" />
-    <title>{post.data.title}</title>
-  </head>
+<body style="
+max-width:700px;
+margin:auto;
+padding:40px;
+background:#0b0b0f;
+color:white;
+">
 
-  <body style="max-width:720px;margin:auto;padding:40px;font-family:sans-serif;">
-    <h1>{post.data.title}</h1>
+<h1>{post.data.title}</h1>
 
-    <p>
-      {post.data.pubDate.toLocaleDateString("zh-TW")}
-    </p>
+<Content />
 
-    <hr />
-
-    <article set:html={post.body} />
-  </body>
+</body>
 </html>

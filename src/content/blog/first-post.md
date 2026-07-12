@@ -1,7 +1,9 @@
 ---
-title: "第一篇"
-description: "測試文章"
-pubDate: 2026-07-05
+title: "..."
+description: "..."
+pubDate: 2026-07-04
+tags: ["長距離", "公告"]
+
 ---
 
 今天把 outofnoise 上線了。

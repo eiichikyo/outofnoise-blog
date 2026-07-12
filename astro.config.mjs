@@ -1,7 +1,12 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 
 export default defineConfig({
-  // 部署到 Netlify 後，把這裡換成你自己的網址
-  // 例如 https://your-blog-name.netlify.app
   site: 'https://outofnoise.netlify.app',
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: 'Atkinson Hyperlegible',
+      cssVariable: '--font-atkinson',
+    },
+  ],
 });

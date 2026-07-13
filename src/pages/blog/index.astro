@@ -1,35 +1,24 @@
 ---
 import { getCollection } from "astro:content";
-
-const posts = await getCollection("blog");
-
-console.log(posts);
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
-
-
-
 <html lang="zh">
 <body style="background:#0b0b0f;color:white;padding:40px;">
-
 <h1>Posts</h1>
-
-{
-posts.map((post)=>(
-<article style="margin-bottom:20px;">
-<a
-href={`/blog/${post.slug}`}
-style="color:white;text-decoration:none;"
->
-{post.data.title}
-</a>
-
-<p style="opacity:.6">
-{post.data.description}
-</p>
-
-</article>
-))
-}
-
+{posts.map((post) => (
+  <article style="margin-bottom:20px;">
+    <a href={`/blog/${post.id}`} style="color:white;text-decoration:none;font-size:1.2rem;">
+      {post.data.title}
+    </a>
+    <p style="opacity:.5;font-size:.85rem;">
+      {post.data.pubDate.toLocaleDateString('zh-TW')}
+      {post.data.tags.map((tag) => (
+        <a href={`/tags/${tag}`} style="color:#888;margin-left:.5em;">#{tag}</a>
+      ))}
+    </p>
+    <p style="opacity:.6">{post.data.description}</p>
+  </article>
+))}
 </body>
 </html>

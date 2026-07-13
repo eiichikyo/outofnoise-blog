@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
+import Giscus from "../../components/Giscus.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -20,3 +21,4 @@ const readingTime = Math.max(1, Math.ceil(wordCount / 400));
 <BlogPost {...post.data} wordCount={wordCount} readingTime={readingTime}>
   <Content />
 </BlogPost>
+<Giscus />

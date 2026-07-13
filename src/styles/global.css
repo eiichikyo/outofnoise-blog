@@ -139,3 +139,19 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--black: 234, 237, 243;
+		--gray: 148, 163, 184;
+		--gray-light: 51, 58, 74;
+		--gray-dark: 226, 232, 240;
+		--gray-gradient: rgba(var(--gray-light), 50%), #0b0d12;
+	}
+	body {
+		background-color: #0b0d12;
+	}
+	code {
+		background-color: rgba(255, 255, 255, 0.08);
+	}
+}

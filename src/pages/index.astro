@@ -1,106 +1,121 @@
 ---
 import { getCollection } from "astro:content";
-
 const posts = await getCollection("blog");
-
-// 建站時間
 const createdAt = new Date("2026-07-04");
-
-// 現在時間
 const now = new Date();
-
-// 運行天數
 const daysRunning = Math.floor(
   (now.getTime() - createdAt.getTime()) /
   (1000 * 60 * 60 * 24)
 );
-
-// 總字數
 const totalWords = posts.reduce((sum, post) => {
   return sum + post.body.split(/\s+/).filter(Boolean).length;
 }, 0);
 ---
-
 <!doctype html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
 <title>記憶消融前。</title>
-
 <style>
+:root{
+  --overlay: rgba(255,255,255,0.55);
+  --fg: #1a1a1a;
+  --border: #ccc;
+  --pill-bg: rgba(255,255,255,0.5);
+  --muted: #444;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --overlay: rgba(11,11,15,0.55);
+    --fg: #eaeaea;
+    --border: #333;
+    --pill-bg: rgba(11,11,15,0.4);
+    --muted: #aaa;
+  }
+}
 body{
 margin:0;
-background:#0b0b0f;
-color:#eaeaea;
+background:
+  linear-gradient(var(--overlay), var(--overlay)),
+  url('/images/bg.jpg') center/cover no-repeat fixed;
+color:var(--fg);
 font-family:sans-serif;
-
 display:flex;
 justify-content:center;
 align-items:center;
-
 height:100vh;
+position:relative;
 }
-
 main{
 text-align:center;
 }
-
 h1{
-font-size:3rem;
+font-size:1.6rem;
 font-weight:300;
 margin-bottom:50px;
 letter-spacing:4px;
 }
-
 .nav{
 display:flex;
 justify-content:center;
 gap:40px;
 margin-bottom:100px;
+flex-wrap:wrap;
 }
-
 .nav a{
-color:white;
+color:var(--fg);
 text-decoration:none;
 font-size:1.3rem;
 padding:12px 24px;
-border:1px solid #333;
+border:1px solid var(--border);
 border-radius:10px;
 transition:.3s;
+background:var(--pill-bg);
 }
-
 .nav a:hover{
-background:white;
-color:black;
+background:var(--fg);
+color:var(--overlay);
 }
-
 .stats{
 font-size:.8rem;
-opacity:.45;
+color:var(--muted);
 line-height:1.8;
 }
+.rss-link{
+position:fixed;
+top:24px;
+right:32px;
+color:var(--fg);
+opacity:.6;
+transition:.3s;
+}
+.rss-link:hover{
+opacity:1;
+}
 </style>
-
 </head>
-
 <body>
-
+<a href="/rss.xml" class="rss-link" title="RSS Feed" target="_blank">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="5" cy="19" r="2" fill="currentColor"/>
+    <path d="M4 4C12.8366 4 20 11.1634 20 20H16C16 13.3726 10.6274 8 4 8V4Z" fill="currentColor"/>
+    <path d="M4 11C9.52285 11 14 15.4772 14 21H10C10 17.6863 7.31371 15 4 15V11Z" fill="currentColor"/>
+  </svg>
+</a>
 <main>
-
 <h1>記憶消融前。</h1>
-
 <div class="nav">
 <a href="/blog">📝 Posts</a>
 <a href="/tags">🏷 Tags</a>
+<a href="/friends">🔗 友鏈</a>
 </div>
-
 <div class="stats">
 <div>Running {daysRunning} days</div>
 <div>{posts.length} posts · {totalWords} words</div>
 </div>
-
 </main>
-
 </body>
 </html>

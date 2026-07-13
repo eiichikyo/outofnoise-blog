@@ -1,0 +1,46 @@
+---
+const friends = [
+  { name: '範例朋友 A', url: 'https://example.com', desc: '一句話介紹這個網站' },
+  { name: '範例朋友 B', url: 'https://example.org', desc: '一句話介紹這個網站' },
+];
+---
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>友鏈 | 記憶消融前。</title>
+<style>
+:root{ --bg:#fff; --fg:#1a1a1a; --border:#e5e5e5; --muted:#666; }
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b0b0f; --fg:#eaeaea; --border:#2a2a30; --muted:#888; }
+}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:sans-serif;padding:60px 40px;}
+main{max-width:720px;margin:0 auto;}
+h1{font-weight:300;letter-spacing:4px;margin-bottom:10px;}
+.back{display:inline-block;margin-bottom:40px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+.back:hover{color:var(--fg);}
+.friend-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:16px;}
+.friend-list li{border:1px solid var(--border);border-radius:10px;padding:16px;transition:.3s;}
+.friend-list li:hover{border-color:var(--muted);}
+.friend-list a{color:var(--fg);font-size:1.1rem;text-decoration:none;}
+.friend-list p{margin:8px 0 0 0;opacity:.5;font-size:.85rem;}
+</style>
+</head>
+<body>
+<main>
+<a href="/" class="back">← 回首頁</a>
+<h1>友鏈</h1>
+<ul class="friend-list">
+{friends.map((f) => (
+  <li>
+    <a href={f.url} target="_blank" rel="noopener noreferrer">{f.name}</a>
+    <p>{f.desc}</p>
+  </li>
+))}
+</ul>
+</main>
+</body>
+</html>

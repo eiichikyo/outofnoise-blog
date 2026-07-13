@@ -3,21 +3,44 @@ import { getCollection } from "astro:content";
 const posts = (await getCollection("blog"))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
+<!doctype html>
 <html lang="zh">
-<body style="background:#0b0b0f;color:white;padding:40px;">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<title>Posts | 記憶消融前。</title>
+<style>
+:root{ --bg:#fff; --fg:#1a1a1a; --muted:#666; --border:#e5e5e5; }
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0b0b0f; --fg:#eaeaea; --muted:#888; --border:#2a2a30; }
+}
+body{background:var(--bg);color:var(--fg);padding:40px;font-family:sans-serif;margin:0;}
+h1{font-weight:300;letter-spacing:2px;}
+.back{display:inline-block;margin-bottom:30px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+.back:hover{color:var(--fg);}
+article{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+article a{color:var(--fg);text-decoration:none;font-size:1.2rem;}
+article a:hover{opacity:.7;}
+.meta{opacity:.5;font-size:.85rem;}
+.meta a{color:var(--muted);margin-left:.5em;text-decoration:none;}
+.desc{opacity:.6;}
+</style>
+</head>
+<body>
+<a href="/" class="back">← 回首頁</a>
 <h1>Posts</h1>
 {posts.map((post) => (
-  <article style="margin-bottom:20px;">
-    <a href={`/blog/${post.id}`} style="color:white;text-decoration:none;font-size:1.2rem;">
-      {post.data.title}
-    </a>
-    <p style="opacity:.5;font-size:.85rem;">
+  <article>
+    <a href={`/blog/${post.id}`}>{post.data.title}</a>
+    <p class="meta">
       {post.data.pubDate.toLocaleDateString('zh-TW')}
       {post.data.tags.map((tag) => (
-        <a href={`/tags/${tag}`} style="color:#888;margin-left:.5em;">#{tag}</a>
+        <a href={`/tags/${tag}`}>#{tag}</a>
       ))}
     </p>
-    <p style="opacity:.6">{post.data.description}</p>
+    <p class="desc">{post.data.description}</p>
   </article>
 ))}
 </body>

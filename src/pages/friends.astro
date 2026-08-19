@@ -1,15 +1,11 @@
 ---
-const friends = [
-  { name: '範例朋友 A', url: 'https://example.com', desc: '一句話介紹這個網站' },
-  { name: '範例朋友 B', url: 'https://example.org', desc: '一句話介紹這個網站' },
-];
+const friends = [];
 ---
 <!doctype html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>友鏈 | 記憶消融前。</title>
 <style>
@@ -22,17 +18,48 @@ main{max-width:720px;margin:0 auto;}
 h1{font-weight:300;letter-spacing:4px;margin-bottom:10px;}
 .back{display:inline-block;margin-bottom:40px;color:var(--muted);text-decoration:none;font-size:.9rem;}
 .back:hover{color:var(--fg);}
-.friend-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:16px;}
+.friend-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:16px;margin-bottom:50px;}
 .friend-list li{border:1px solid var(--border);border-radius:10px;padding:16px;transition:.3s;}
 .friend-list li:hover{border-color:var(--muted);}
 .friend-list a{color:var(--fg);font-size:1.1rem;text-decoration:none;}
 .friend-list p{margin:8px 0 0 0;opacity:.5;font-size:.85rem;}
+.empty{opacity:.5;margin-bottom:50px;}
+h2{font-weight:300;font-size:1.2rem;margin-bottom:20px;}
+form{display:flex;flex-direction:column;gap:14px;max-width:420px;}
+label{font-size:.85rem;opacity:.7;margin-bottom:4px;display:block;}
+input{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:transparent;
+  color:var(--fg);
+  font-size:.95rem;
+  box-sizing:border-box;
+}
+input:focus{outline:none;border-color:var(--muted);}
+button{
+  padding:10px 20px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:transparent;
+  color:var(--fg);
+  font-size:.95rem;
+  cursor:pointer;
+  transition:.3s;
+  width:fit-content;
+}
+button:hover{background:var(--fg);color:var(--bg);}
+.hidden{display:none;}
 </style>
 </head>
 <body>
 <main>
 <a href="/" class="back">← 回首頁</a>
 <h1>友鏈</h1>
+
+{friends.length === 0 && <p class="empty">目前還沒有友鏈，歡迎在下方提交你的網站 🙌</p>}
+
 <ul class="friend-list">
 {friends.map((f) => (
   <li>
@@ -41,6 +68,28 @@ h1{font-weight:300;letter-spacing:4px;margin-bottom:10px;}
   </li>
 ))}
 </ul>
+
+<h2>提交友鏈</h2>
+<form name="friend-links" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="friend-links" />
+  <p class="hidden">
+    <label>不要填這欄：<input name="bot-field" /></label>
+  </p>
+  <div>
+    <label for="name">名字</label>
+    <input type="text" id="name" name="name" required />
+  </div>
+  <div>
+    <label for="url">網址</label>
+    <input type="url" id="url" name="url" placeholder="https://" required />
+  </div>
+  <div>
+    <label for="desc">一句話介紹</label>
+    <input type="text" id="desc" name="desc" required />
+  </div>
+  <button type="submit">送出</button>
+</form>
+
 </main>
 </body>
 </html>

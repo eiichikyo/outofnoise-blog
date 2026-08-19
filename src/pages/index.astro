@@ -8,7 +8,8 @@ const daysRunning = Math.floor(
   (1000 * 60 * 60 * 24)
 );
 const totalWords = posts.reduce((sum, post) => {
-  return sum + post.body.split(/\s+/).filter(Boolean).length;
+  const plainText = post.body?.replace(/[#*`_>\-\[\]!]/g, "") ?? "";
+  return sum + plainText.replace(/\s/g, "").length;
 }, 0);
 ---
 <!doctype html>
@@ -16,7 +17,6 @@ const totalWords = posts.reduce((sum, post) => {
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width" />
-<link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>記憶消融前。</title>
 <style>
@@ -109,7 +109,6 @@ opacity:1;
 <h1>記憶消融前。</h1>
 <div class="nav">
 <a href="/blog">📝 Posts</a>
-<a href="/tags">🏷 Tags</a>
 <a href="/friends">🔗 友鏈</a>
 </div>
 <div class="stats">

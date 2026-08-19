@@ -25,6 +25,7 @@ const totalWords = posts.reduce((sum, post) => {
   --fg: #1a1a1a;
   --border: #ccc;
   --pill-bg: rgba(255,255,255,0.5);
+  --bg-color: #f4f2ee;
   --muted: #444;
 }
 @media (prefers-color-scheme: dark){
@@ -33,14 +34,13 @@ const totalWords = posts.reduce((sum, post) => {
     --fg: #eaeaea;
     --border: #333;
     --pill-bg: rgba(11,11,15,0.4);
+    --bg-color: #14161c;
     --muted: #aaa;
   }
 }
 body{
 margin:0;
-background:
-  linear-gradient(var(--overlay), var(--overlay)),
-  url('/images/bg.jpg') center/cover no-repeat fixed;
+background: var(--bg-color);
 color:var(--fg);
 font-family:sans-serif;
 display:flex;

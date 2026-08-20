@@ -1,12 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 const posts = await getCollection("blog");
-const createdAt = new Date("2026-07-04");
-const now = new Date();
-const daysRunning = Math.floor(
-  (now.getTime() - createdAt.getTime()) /
-  (1000 * 60 * 60 * 24)
-);
 const totalWords = posts.reduce((sum, post) => {
   const plainText = post.body?.replace(/[#*`_>\-\[\]!]/g, "") ?? "";
   return sum + plainText.replace(/\s/g, "").length;
@@ -112,9 +106,17 @@ opacity:1;
 <a href="/friends">🔗 友鏈</a>
 </div>
 <div class="stats">
-<div>Running {daysRunning} days</div>
-<div>{posts.length} posts · {totalWords} words</div>
+<div id="days-running">Running ... days</div>
+<div>{posts.length} posts · {totalWords} characters </div>
 </div>
 </main>
+<script>
+  const createdAt = new Date("2026-07-04");
+  const now = new Date();
+  const daysRunning = Math.floor(
+    (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  document.getElementById("days-running").textContent = `Running ${daysRunning} days`;
+</script>
 </body>
 </html>

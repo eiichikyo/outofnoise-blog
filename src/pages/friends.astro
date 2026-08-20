@@ -51,6 +51,9 @@ button{
 }
 button:hover{background:var(--fg);color:var(--bg);}
 .hidden{display:none;}
+.my-info{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);}
+.my-info p{margin:4px 0;opacity:.7;font-size:.9rem;}
+.my-info a{color:var(--fg);}
 </style>
 </head>
 <body>
@@ -58,16 +61,12 @@ button:hover{background:var(--fg);color:var(--bg);}
 <a href="/" class="back">← 回首頁</a>
 <h1>友鏈</h1>
 
-{friends.length === 0 && <p class="empty">目前還沒有友鏈，歡迎在下方提交您的網站！</p>}
-
-<ul class="friend-list">
-{friends.map((f) => (
-  <li>
-    <a href={f.url} target="_blank" rel="noopener noreferrer">{f.name}</a>
-    <p>{f.desc}</p>
-  </li>
-))}
-</ul>
+{friends.length === 0 && (
+  <>
+    <p class="empty">目前還沒有友鏈，歡迎在下方提交您的網站！</p>
+    
+  </>
+)}
 
 <h2>提交友鏈</h2>
 <form name="friend-links" method="POST" data-netlify="true" netlify-honeypot="bot-field">
@@ -76,7 +75,7 @@ button:hover{background:var(--fg);color:var(--bg);}
     <label>不要填這欄：<input name="bot-field" /></label>
   </p>
   <div>
-    <label for="name">名字</label>
+    <label for="name">名稱</label>
     <input type="text" id="name" name="name" required />
   </div>
   <div>
@@ -84,11 +83,18 @@ button:hover{background:var(--fg);color:var(--bg);}
     <input type="url" id="url" name="url" placeholder="https://" required />
   </div>
   <div>
-    <label for="desc">一句話介紹</label>
+    <label for="desc">簡介</label>
     <input type="text" id="desc" name="desc" required />
   </div>
   <button type="submit">送出</button>
 </form>
+
+<div class="my-info">
+  <p>本站友鏈信息：</p>
+  <p>名稱：記憶消融前。</p>
+  <p>網址：<a href="https://outofnoise.netlify.app/" target="_blank">https://outofnoise.netlify.app/</a></p>
+  <p>簡介：ふとした景色が頭に残るような事、大切にするって決めたんだ </p>
+</div>
 
 </main>
 </body>

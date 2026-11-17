@@ -1,0 +1,24 @@
+---
+import { getCollection } from "astro:content";
+const posts = await getCollection("blog");
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+const tags = [...tagCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+---
+<html lang="zh">
+<body style="background:#0b0b0f;color:white;padding:40px;">
+<h1>Tags</h1>
+<div style="display:flex;flex-wrap:wrap;gap:10px;">
+  {tags.map(([tag, count]) => (
+    <a href={`/tags/${tag}`} style="color:white;border:1px solid #333;border-radius:8px;padding:6px 14px;text-decoration:none;">
+      #{tag} ({count})
+    </a>
+  ))}
+</div>
+</body>
+</html>
+

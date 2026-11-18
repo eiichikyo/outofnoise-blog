@@ -1,93 +1,155 @@
 ---
-import { Image } from 'astro:assets';
+import '../styles/global.css';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
-import Header from '../components/Header.astro';
+import ThemeInit from '../components/ThemeInit.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import ReactionButton from '../components/ReactionButton.astro';
 
 type Props = CollectionEntry<'blog'>['data'] & {
+	slug: string;
 	wordCount: number;
 	readingTime: number;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, wordCount, readingTime } = Astro.props;
+const { title, description, pubDate, slug, wordCount, readingTime } = Astro.props;
+const year = new Date().getFullYear();
 ---
 <html lang="zh">
 	<head>
 		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.3em;
-				color: rgb(var(--gray));
-			}
-			.meta {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-				font-size: 0.9em;
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
+		<ThemeInit />
 	</head>
 	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
+		<header class="site-top">
+			<ThemeToggle />
+		</header>
+
+		<div class="post-layout">
+			<main class="post">
+				<article>
+					<header class="post-header">
+						<div class="post-meta">
 							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
+							<span> · {wordCount} 字 · 約 {readingTime} 分鐘閱讀</span>
 						</div>
-						<div class="meta">{wordCount} 字 · 約 {readingTime} 分鐘閱讀</div>
-						<h1>{title}</h1>
-						<hr />
+						<h1 class="post-title">{title}</h1>
+					</header>
+
+					<div class="prose">
+						<slot />
 					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
+
+					<ReactionButton slug={slug} />
+				</article>
+			</main>
+
+			<aside class="toc" id="toc" aria-label="目錄"></aside>
+		</div>
+
+		<footer class="post-footer">
+			© {year} · <em class="site-name">outofnoise</em> · All rights reserved.
+		</footer>
 	</body>
 </html>
+
+<style>
+	.post-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 720px) 240px;
+		justify-content: center;
+		align-items: start;
+		gap: 2rem;
+		max-width: 1000px;
+		margin: 0 auto;
+		padding: 4.5em 1em 2em;
+	}
+
+	.post {
+		min-width: 0;
+	}
+
+	.post-meta {
+		font-family: var(--font-title);
+		font-size: 0.85rem;
+		color: var(--subtle);
+		margin-bottom: 0.75rem;
+	}
+
+	.post-title {
+		font-family: var(--font-title);
+		font-weight: 700;
+		font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.2rem);
+		line-height: 1.35;
+		margin: 0 0 2.5rem;
+		color: var(--heading);
+	}
+
+	.prose {
+		font-family: var(--font-title);
+		font-size: clamp(0.95rem, 0.85rem + 0.3vw, 1.1rem);
+		line-height: 2;
+		letter-spacing: 0.04em;
+		color: var(--fg);
+	}
+
+	.prose :global(p) {
+		text-indent: 2em;
+		margin: 0 0 1.2em;
+	}
+
+	.prose :global(h2) {
+		font-size: 1.4em;
+		line-height: 1.4;
+		margin: 2.2em 0 1em;
+		text-indent: 0;
+	}
+
+	.prose :global(h3),
+	.prose :global(h4) {
+		font-size: 1.15em;
+		line-height: 1.4;
+		margin: 1.8em 0 0.8em;
+		text-indent: 0;
+	}
+
+	.prose :global(ul),
+	.prose :global(ol) {
+		margin: 0 0 1.2em;
+		padding-left: 2em;
+	}
+
+	.prose :global(blockquote p) {
+		text-indent: 0;
+	}
+
+	.toc {
+		position: sticky;
+		top: 6rem;
+		min-height: 10rem;
+	}
+
+	.post-footer {
+		text-align: center;
+		font-size: 0.8rem;
+		color: var(--subtle);
+		padding: 2rem 1em 3rem;
+	}
+
+	@media (max-width: 900px) {
+		.post-layout {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.toc {
+			display: none;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.post-layout {
+			padding: 3em 0.5em 1em;
+		}
+	}
+</style>

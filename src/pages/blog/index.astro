@@ -1,24 +1,74 @@
 ---
-import { getCollection } from "astro:content";
-const posts = (await getCollection("blog"))
+import { getCollection } from 'astro:content';
+import '../../styles/global.css';
+import ThemeInit from '../../components/ThemeInit.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
+
+const posts = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 依 id 產生固定的水平偏移（-12px 到 +12px），同一篇每次建置都一樣
+function hash(str: string): number {
+  let h = 0;
+  for (const c of str) h = (h * 31 + c.charCodeAt(0)) | 0;
+  return Math.abs(h);
+}
+const jitter = (id: string) => (hash(id) % 25) - 12;
 ---
+<!doctype html>
 <html lang="zh">
-<body style="background:#0b0b0f;color:white;padding:40px;">
-<h1>Posts</h1>
-{posts.map((post) => (
-  <article style="margin-bottom:20px;">
-    <a href={`/blog/${post.id}`} style="color:white;text-decoration:none;font-size:1.2rem;">
-      {post.data.title}
-    </a>
-    <p style="opacity:.5;font-size:.85rem;">
-      {post.data.pubDate.toLocaleDateString('zh-TW')}
-      {post.data.tags.map((tag) => (
-        <a href={`/tags/${tag}`} style="color:#888;margin-left:.5em;">#{tag}</a>
-      ))}
-    </p>
-    <p style="opacity:.6">{post.data.description}</p>
-  </article>
-))}
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Posts</title>
+  <ThemeInit />
+</head>
+<body>
+
+<header class="site-top">
+  <ThemeToggle />
+</header>
+
+<main class="posts">
+  <h1>Posts</h1>
+
+  <ol class="timeline">
+    {posts.map((post, i) => {
+      const next = posts[i + 1];
+      const x1 = 50 + jitter(post.id);
+      const x2 = next ? 50 + jitter(next.id) : x1;
+      return (
+        <li class="tl-item">
+          {next && (
+            <svg class="tl-link" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+              <line x1={x1} y1="0" x2={x2} y2="100" />
+            </svg>
+          )}
+
+          <time class="tl-date" datetime={post.data.pubDate.toISOString()}>
+            {post.data.pubDate.toLocaleDateString('zh-TW')}
+          </time>
+
+          <span class="tl-dot" style={`--jx:${jitter(post.id)}px`} aria-hidden="true"></span>
+
+          <div class="tl-body">
+            <a class="tl-title" href={`/blog/${post.id}`}>
+              {post.data.title}
+            </a>
+            <p class="tl-desc">{post.data.description}</p>
+            {post.data.tags.length > 0 && (
+              <p class="tl-tags">
+                {post.data.tags.map((tag) => (
+                  <a class="tl-tag" href={`/tags/${tag}`}>#{tag}</a>
+                ))}
+              </p>
+            )}
+          </div>
+        </li>
+      );
+    })}
+  </ol>
+</main>
+
 </body>
 </html>

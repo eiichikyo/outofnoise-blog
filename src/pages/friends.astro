@@ -1,4 +1,8 @@
 ---
+import '../styles/global.css';
+import ThemeInit from '../components/ThemeInit.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
 const friends = [
   { name: "Curly Sheep", url: "https://curly-sheep.netlify.app/", desc: "卷毛羊的赛博羊圈！" },
   // 新增友链示例：
@@ -12,25 +16,22 @@ const friends = [
 <meta name="viewport" content="width=device-width" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <title>友鏈 | 記憶消融前。</title>
+<ThemeInit />
 <style>
-:root{ --bg:#fff; --fg:#1a1a1a; --border:#e5e5e5; --muted:#666; }
-@media (prefers-color-scheme: dark){
-  :root{ --bg:#0b0b0f; --fg:#eaeaea; --border:#2a2a30; --muted:#888; }
-}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:sans-serif;padding:60px 40px;}
+body{margin:0;background:var(--bg-color);color:var(--fg);font-family:var(--font-sans);padding:60px 40px;}
 main{max-width:720px;margin:0 auto;}
-h1{font-weight:300;letter-spacing:4px;margin-bottom:10px;}
+h1{font-weight:700;letter-spacing:4px;margin-bottom:10px;color:var(--heading);font-family:var(--font-title);}
 .back{display:inline-block;margin-bottom:40px;color:var(--muted);text-decoration:none;font-size:.9rem;}
 .back:hover{color:var(--fg);}
 .friend-list{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));gap:16px;margin-bottom:50px;}
 .welcome{margin:0 0 24px 0;opacity:.6;font-size:.85rem;}
-.friend-list li{border:1px solid var(--border);border-radius:10px;transition:.3s;}
-.friend-list li:hover{border-color:var(--muted);transform:translateY(-2px);}
+.friend-list li{border:1px solid var(--border);border-radius:10px;background:var(--pill-bg);transition:.3s;}
+.friend-list li:hover{border-color:var(--accent);transform:translateY(-2px);}
 .friend-list a{display:block;height:100%;box-sizing:border-box;padding:16px;color:var(--fg);text-decoration:none;}
-.friend-name{display:block;font-size:1.1rem;}
+.friend-name{display:block;font-size:1.1rem;font-family:var(--font-title);font-weight:700;}
 .friend-desc{display:block;margin-top:8px;opacity:.5;font-size:.85rem;line-height:1.5;}
 .empty{opacity:.5;margin-bottom:50px;}
-h2{font-weight:300;font-size:1.2rem;margin-bottom:20px;}
+h2{font-weight:700;font-size:1.2rem;margin-bottom:20px;color:var(--heading);font-family:var(--font-title);}
 form{display:flex;flex-direction:column;gap:14px;max-width:420px;}
 label{font-size:.85rem;opacity:.7;margin-bottom:4px;display:block;}
 input{
@@ -38,24 +39,24 @@ input{
   padding:10px 12px;
   border:1px solid var(--border);
   border-radius:8px;
-  background:transparent;
+  background:var(--pill-bg);
   color:var(--fg);
   font-size:.95rem;
   box-sizing:border-box;
 }
-input:focus{outline:none;border-color:var(--muted);}
+input:focus{outline:none;border-color:var(--accent);}
 button{
   padding:10px 20px;
   border:1px solid var(--border);
   border-radius:8px;
-  background:transparent;
+  background:var(--pill-bg);
   color:var(--fg);
   font-size:.95rem;
   cursor:pointer;
   transition:.3s;
   width:fit-content;
 }
-button:hover{background:var(--fg);color:var(--bg);}
+button:hover{background:var(--hover-bg);color:var(--hover-fg);border-color:var(--hover-bg);}
 .hidden{display:none;}
 .my-info{margin-top:40px;padding-top:20px;border-top:1px solid var(--border);}
 .my-info p{margin:4px 0;opacity:.7;font-size:.9rem;}
@@ -63,6 +64,9 @@ button:hover{background:var(--fg);color:var(--bg);}
 </style>
 </head>
 <body>
+<header class="site-top">
+  <ThemeToggle />
+</header>
 <main>
 <a href="/" class="back">← 回首頁</a>
 <h1>友鏈</h1>

@@ -1,18 +1,36 @@
 ---
-import { getCollection, render } from "astro:content";
-import BlogPost from "../../layouts/BlogPost.astro";
+import { getCollection, render } from 'astro:content';
+import BlogPost from '../../layouts/BlogPost.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog");
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: { post },
-  }));
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: { post },
+	}));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+// 去掉 Markdown / HTML 語法，只保留正文文字
+const text = post.body
+	.replace(/```[\s\S]*?```/g, '')
+	.replace(/`[^`]*`/g, '')
+	.replace(/<[^>]+>/g, '')
+	.replace(/!?\[([^\]]*)\]\([^)]*\)/g, '$1')
+	.replace(/[#*_>~|\-]/g, '');
+
+const cjkChars = (text.match(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g) || []).length;
+
+const latinWords = (
+	text.replace(/[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]/g, ' ').match(/[A-Za-z0-9]+/g) || []
+).length;
+
+const wordCount = cjkChars + latinWords;
+const readingTime = Math.max(1, Math.ceil(cjkChars / 300 + latinWords / 200));
 ---
-<BlogPost {...post.data}>
-  <Content />
-</BlogPost> 
+
+<BlogPost {...post.data} wordCount={wordCount} readingTime={readingTime}>
+	<Content />
+</BlogPost>

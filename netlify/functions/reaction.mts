@@ -5,8 +5,8 @@ export default async (req: Request, _context: Context) => {
   const url = new URL(req.url);
   const slug = url.searchParams.get('slug') ?? '';
 
-  // 只允許安全的 slug
-  if (!slug || !/^[\w\-\/]+$/.test(slug)) {
+  // 允許中文，只擋空值、過長、斜線與控制字元
+  if (!slug || slug.length > 200 || /[\/\\\s\x00-\x1f]/.test(slug)) {
     return Response.json({ error: 'invalid slug' }, { status: 400 });
   }
 

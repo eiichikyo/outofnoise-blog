@@ -267,25 +267,24 @@ hr {
     color: var(--heading);
 }
 
-/* 標題逐字蒸發：每個字依 --i 錯開起始時間，只播放一次，結束後保持消失 */
+/* 標題：打開即全部可見，停留後逐字蒸發，播一次後保持消失 */
 .home h1 .ch {
     display: inline-block;
-    animation: evaporate 10s ease-in-out 1 both;
+    animation-name: evaporate;
+    animation-duration: 10s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: both;
     animation-delay: calc(var(--i) * 0.5s);
 }
 
 @keyframes evaporate {
     0% {
-        opacity: 0;
-        filter: blur(4px);
-        transform: translateY(6px);
-    }
-    10% {
         opacity: 1;
         filter: blur(0);
         transform: none;
     }
-    50% {
+    6% {
         opacity: 1;
         filter: blur(0);
         transform: none;
@@ -296,6 +295,7 @@ hr {
         transform: translateY(-22px) scale(1.2);
     }
 }
+
 
 .nav {
     display: flex;

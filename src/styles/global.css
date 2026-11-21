@@ -573,3 +573,26 @@ hr {
     min-width: 2ch;
     text-align: left;
 }
+
+/* 回主頁按鈕：與日夜切換同風格 */
+.home-link {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--pill-bg);
+    color: var(--fg);
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.home-link:hover {
+    border-color: var(--accent);
+    transform: rotate(-20deg);
+}
+
+.home-link svg {
+    display: block;
+}
